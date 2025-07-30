@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose'); // Importar Mongoose
 const cors = require('cors'); // <-- ¡Esta línea!
+require('dotenv').config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -22,7 +23,8 @@ app.use(express.json());
 // ¡Asegúrate de reemplazar <username> y <password> con tus credenciales reales!
 // Es MEJOR práctica usar variables de entorno para esto (ej. process.env.MONGO_URI)
 // Por ahora, para simplificar, puedes pegarla directamente aquí:
-const MONGO_URI = 'mongodb+srv://agf009:MiClaveSencilla123@todoappcluster.07ohgcn.mongodb.net/?retryWrites=true&w=majority&appName=TodoAppCluster';
+//const MONGO_URI = 'mongodb+srv://agf009:MiClaveSencilla123@todoappcluster.07ohgcn.mongodb.net/?retryWrites=true&w=majority&appName=TodoAppCluster';
+const MONGO_URI = process.env.MONGO_URI;
 
 mongoose.connect(MONGO_URI)
   .then(() => console.log('Conectado a MongoDB Atlas'))
