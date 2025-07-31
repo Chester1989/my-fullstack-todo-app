@@ -85,6 +85,8 @@ async function updateTask(id, completed) {
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
+    
+        
         // La API devuelve la tarea actualizada, pero fetchTasks refrescará todo
         // const updatedTask = await response.json();
         fetchTasks(); // Volver a cargar todas las tareas para reflejar el cambio
