@@ -6,20 +6,39 @@ const taskList = document.getElementById('task-list');
 // URL base de nuestro backend API
 const API_URL = 'https://my-todo-apy.onrender.com/api/tasks';
 
+// Función para obtener y mostrar todas las tareas (MODIFICADA)
+async function fetchTasks(filter = 'all') { // <-- Ahora acepta un parámetro
+    try {
+        let url = API_URL;
+        if (filter === 'pending') {
+            url = `${API_URL}?completed=false`; // <-- Añade el filtro a la URL
+        } else if (filter === 'completed') {
+            url = `${API_URL}?completed=true`; // <-- Añade el filtro a la URL
+        }
+
+        const response = await fetch(url);
+        // ... (el resto de la función es igual) ...
+    } catch (error) {
+        console.error('Error al obtener las tareas:', error);
+        alert('No se pudieron cargar las tareas. Revisa la consola para más detalles.');
+    }
+}
+
 // --- Funciones de Interacción con la API ---
 
 // Función para obtener y mostrar todas las tareas
-async function fetchTasks() {
+/*async function fetchTasks() {
     try {
         const response = await fetch(API_URL); // Realiza una petición GET a la API
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const tasks = await response.json(); // Parsea la respuesta JSON
+        } 
+
+        const tasks = await response.json();*/ // Parsea la respuesta JSON
 
         taskList.innerHTML = ''; // Limpia la lista actual antes de añadir las nuevas tareas
 
-        // Itera sobre cada tarea y la añade al DOM
+        /* Itera sobre cada tarea y la añade al DOM
         tasks.forEach(task => {
             addTaskToDOM(task);
         });
@@ -27,7 +46,7 @@ async function fetchTasks() {
         console.error('Error al obtener las tareas:', error);
         alert('No se pudieron cargar las tareas. Revisa la consola para más detalles.');
     }
-}
+}*/
 
 // Función para añadir una nueva tarea
 async function addTask(text) {
@@ -250,3 +269,42 @@ taskForm.addEventListener('submit', (e) => {
 
 // Cargar las tareas cuando la página se carga
 document.addEventListener('DOMContentLoaded', fetchTasks);
+
+/*const taskForm = document.getElementById('task-form');
+const taskInput = document.getElementById('task-input');
+const taskList = document.getElementById('task-list');*/
+
+// --- NUEVAS constantes para los filtros ---
+const filterAllBtn = document.getElementById('filter-all');
+const filterPendingBtn = document.getElementById('filter-pending');
+const filterCompletedBtn = document.getElementById('filter-completed');
+
+
+// --- NUEVOS Event Listeners para los botones de filtro ---
+filterAllBtn.addEventListener('click', () => {
+    setActiveFilter(filterAllBtn);
+    fetchTasks('all');
+});
+
+filterPendingBtn.addEventListener('click', () => {
+    setActiveFilter(filterPendingBtn);
+    fetchTasks('pending');
+});
+
+filterCompletedBtn.addEventListener('click', () => {
+    setActiveFilter(filterCompletedBtn);
+    fetchTasks('completed');
+});
+
+// Función auxiliar para cambiar el botón activo
+function setActiveFilter(activeButton) {
+    filterAllBtn.classList.remove('active');
+    filterPendingBtn.classList.remove('active');
+    filterCompletedBtn.classList.remove('active');
+    activeButton.classList.add('active');
+}
+
+// --- Inicialización ---
+
+// Cargar las tareas cuando la página se carga
+document.addEventListener('DOMContentLoaded', () => fetchTasks('all'));

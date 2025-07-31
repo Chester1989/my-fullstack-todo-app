@@ -92,3 +92,30 @@ h1 {
 #task-list li .actions button:hover {
     background-color: #c82333;
 }
+
+/* Estilos para los botones de filtro */
+.filters {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.filter-button {
+    padding: 8px 15px;
+    margin: 0 5px;
+    background-color: #e9ecef;
+    border: 1px solid #ced4da;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    outline: none;
+}
+
+.filter-button:hover {
+    background-color: #dee2e6;
+}
+
+.filter-button.active {
+    background-color: #007bff;
+    color: white;
+    border-color: #007bff;
+}
