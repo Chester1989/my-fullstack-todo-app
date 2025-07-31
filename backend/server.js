@@ -13,10 +13,6 @@ app.use(cors()); // <-- ¡Y esta otra línea, antes de app.use(express.json());!
 app.use(express.json());
 
 
-
-// Middleware para parsear JSON
-app.use(express.json());
-
 // --- Configuración y Conexión a MongoDB ---
 
 // Reemplaza esta línea con la cadena de conexión que copiaste de MongoDB Atlas
@@ -53,11 +49,6 @@ const Task = mongoose.model('Task', taskSchema);
 
 // --- Rutas de Nuestra API ---
 
-// Ruta de ejemplo (GET a la raíz)
-app.get('/', (req, res) => {
-  res.send('¡Servidor de Lista de Tareas funcionando y conectado a DB!');
-});
-
 // 1. OBTENER TODAS LAS TAREAS (READ - GET)
 // La API ahora puede aceptar un filtro para las tareas completadas
 // Ejemplo: /api/tasks?completed=true
@@ -73,8 +64,11 @@ app.get('/api/tasks', async (req, res) => {
         filter.completed = (completed === 'true');
     }
 
-    // Mongoose usa el objeto de filtro para encontrar los documentos correctos
-    const tasks = await Task.find(filter).sort({ createdAt: -1 }); // Agregamos un .sort para que salgan las mas nuevas primero
+    // Mongoose usa el objeto de filtro para encontrar los documentos correctos.
+    // También se usa .sort() para mostrar las tareas más nuevas primero.
+    const tasks = await Task.find(filter).sort({ createdAt: -1 });
+
+    // Envía la lista de tareas (filtrada o no) como respuesta JSON
     res.json(tasks);
   } catch (err) {
     res.status(500).json({ message: err.message });
