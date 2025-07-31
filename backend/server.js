@@ -58,16 +58,29 @@ app.get('/', (req, res) => {
   res.send('¡Servidor de Lista de Tareas funcionando y conectado a DB!');
 });
 
-/// 1. OBTENER TODAS LAS TAREAS (READ - GET)
-// Ruta: GET /api/tasks
+// 1. OBTENER TODAS LAS TAREAS (READ - GET)
+// La API ahora puede aceptar un filtro para las tareas completadas
+// Ejemplo: /api/tasks?completed=true
 app.get('/api/tasks', async (req, res) => {
   try {
-    const tasks = await Task.find(); // Encuentra todos los documentos de tareas
-    res.json(tasks); // Envía las tareas como respuesta JSON
+    const { completed } = req.query; // <-- Lee el parámetro de consulta 'completed'
+
+    let filter = {}; // Creamos un objeto de filtro vacío por defecto
+
+    // Si el parámetro 'completed' existe en la URL
+    if (completed !== undefined) {
+        // Convertimos el string a un booleano y lo añadimos al filtro
+        filter.completed = (completed === 'true');
+    }
+
+    // Mongoose usa el objeto de filtro para encontrar los documentos correctos
+    const tasks = await Task.find(filter).sort({ createdAt: -1 }); // Agregamos un .sort para que salgan las mas nuevas primero
+    res.json(tasks);
   } catch (err) {
-    res.status(500).json({ message: err.message }); // Manejo de errores
+    res.status(500).json({ message: err.message });
   }
 });
+
 
 // 2. CREAR UNA NUEVA TAREA (CREATE - POST)
 // Ruta: POST /api/tasks
