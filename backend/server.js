@@ -113,7 +113,6 @@ app.delete('/api/tasks/:id', async (req, res) => {
 
 // Inicio del servidor
 const PORT = process.env.PORT || 5000;
-// TODO: Comprobar si este comentario aparece en GitHub
 app.listen(PORT, () => {
     console.log(`Servidor escuchando en el puerto ${PORT}`);
 });
