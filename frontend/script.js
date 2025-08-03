@@ -6,6 +6,8 @@ const taskList = document.getElementById('task-list');
 // URL base de nuestro backend API
 const API_URL = 'https://my-todo-apy.onrender.com/api/tasks';
 
+
+// --- Funciones de Interacción con la API ---
 // Función para obtener y mostrar todas las tareas (MODIFICADA)
 async function fetchTasks(filter = 'all') { // <-- Ahora acepta un parámetro
     try {
@@ -23,30 +25,6 @@ async function fetchTasks(filter = 'all') { // <-- Ahora acepta un parámetro
         alert('No se pudieron cargar las tareas. Revisa la consola para más detalles.');
     }
 }
-
-// --- Funciones de Interacción con la API ---
-
-// Función para obtener y mostrar todas las tareas
-/*async function fetchTasks() {
-    try {
-        const response = await fetch(API_URL); // Realiza una petición GET a la API
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        } 
-
-        const tasks = await response.json();*/ // Parsea la respuesta JSON
-
-        taskList.innerHTML = ''; // Limpia la lista actual antes de añadir las nuevas tareas
-
-        /* Itera sobre cada tarea y la añade al DOM
-        tasks.forEach(task => {
-            addTaskToDOM(task);
-        });
-    } catch (error) {
-        console.error('Error al obtener las tareas:', error);
-        alert('No se pudieron cargar las tareas. Revisa la consola para más detalles.');
-    }
-}*/
 
 // Función para añadir una nueva tarea
 async function addTask(text) {
