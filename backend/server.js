@@ -1,12 +1,13 @@
+// Constantes y dependencias
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-require('dotenv').config(); // Carga las variables de entorno desde .env
+require('dotenv').config(); // Carga las variables de entorno
 
+// Inicializar la aplicación de Express
 const app = express();
 
 // Configuración de CORS
-// Permite peticiones desde tu frontend en Netlify
 const corsOptions = {
     origin: process.env.FRONTEND_URL, // Usamos la variable de entorno
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
@@ -43,11 +44,6 @@ const taskSchema = new mongoose.Schema({
 const Task = mongoose.model('Task', taskSchema);
 
 // RUTAS DE LA API
-
-// Ruta de ejemplo (GET a la raíz)
-app.get('/', (req, res) => {
-    res.send('¡Servidor de Lista de Tareas funcionando y conectado a DB!');
-});
 
 // 1. OBTENER TODAS LAS TAREAS (READ - GET)
 app.get('/api/tasks', async (req, res) => {
@@ -116,6 +112,5 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
     console.log(`Servidor escuchando en el puerto ${PORT}`);
 });
-
 
 
