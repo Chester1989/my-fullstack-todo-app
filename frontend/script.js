@@ -6,9 +6,7 @@ const taskList = document.getElementById('task-list');
 // URL base de nuestro backend API
 const API_URL = 'https://my-todo-apy.onrender.com/api/tasks';
 
-
-// --- Funciones de Interacción con la API ---
-// Función para obtener y mostrar todas las tareas (MODIFICADA)
+// Función para obtener y mostrar todas las tareas
 async function fetchTasks(filter = 'all') { // <-- Ahora acepta un parámetro
     try {
         let url = API_URL;
@@ -19,10 +17,23 @@ async function fetchTasks(filter = 'all') { // <-- Ahora acepta un parámetro
         }
 
         const response = await fetch(url);
-        // ... (el resto de la función es igual) ...
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const tasks = await response.json(); // Parsea la respuesta JSON
+
+        taskList.innerHTML = ''; // Limpia la lista actual antes de añadir las nuevas tareas
+
+        // Itera sobre cada tarea y la añade al DOM
+        tasks.forEach(task => {
+            addTaskToDOM(task);
+        });
     } catch (error) {
         console.error('Error al obtener las tareas:', error);
-        alert('No se pudieron cargar las tareas. Revisa la consola para más detalles.');
+        // Reemplazamos alert por una ventana modal para mejor experiencia
+        // alert('No se pudieron cargar las tareas. Revisa la consola para más detalles.');
+        // Considera mostrar un mensaje de error en la página
     }
 }
 
@@ -38,14 +49,14 @@ async function addTask(text) {
         });
 
         if (!response.ok) {
-            throw new new Error(`HTTP error! status: ${response.status}`);
+            throw new Error(`HTTP error! status: ${response.status}`);
         }
         const newTask = await response.json(); // La API devuelve la tarea creada
         addTaskToDOM(newTask); // Añade la nueva tarea al DOM
         taskInput.value = ''; // Limpia el input del formulario
     } catch (error) {
         console.error('Error al añadir la tarea:', error);
-        alert('No se pudo añadir la tarea. Revisa la consola.');
+        // alert('No se pudo añadir la tarea. Revisa la consola.');
     }
 }
 
@@ -63,14 +74,12 @@ async function updateTask(id, completed) {
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
-    
-        
+
         // La API devuelve la tarea actualizada, pero fetchTasks refrescará todo
-        // const updatedTask = await response.json();
         fetchTasks(); // Volver a cargar todas las tareas para reflejar el cambio
     } catch (error) {
         console.error('Error al actualizar la tarea:', error);
-        alert('No se pudo actualizar la tarea. Revisa la consola.');
+        // alert('No se pudo actualizar la tarea. Revisa la consola.');
     }
 }
 
@@ -85,11 +94,10 @@ async function deleteTask(id) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         // La API devuelve un mensaje de éxito, pero fetchTasks refrescará todo
-        // const result = await response.json();
         fetchTasks(); // Volver a cargar todas las tareas para reflejar el cambio
     } catch (error) {
         console.error('Error al eliminar la tarea:', error);
-        alert('No se pudo eliminar la tarea. Revisa la consola.');
+        // alert('No se pudo eliminar la tarea. Revisa la consola.');
     }
 }
 
@@ -111,10 +119,9 @@ async function updateTaskText(id, newText) {
         fetchTasks(); // Refrescar la lista para asegurar que el cambio se muestre
     } catch (error) {
         console.error('Error al actualizar el texto de la tarea:', error);
-        alert('No se pudo actualizar el texto de la tarea. Revisa la consola.');
+        // alert('No se pudo actualizar el texto de la tarea. Revisa la consola.');
     }
 }
-
 
 // --- Funciones de Manipulación del DOM ---
 
@@ -244,15 +251,6 @@ taskForm.addEventListener('submit', (e) => {
         addTask(text); // Llama a la función para añadir la tarea
     }
 });
-
-// --- Inicialización ---
-
-// Cargar las tareas cuando la página se carga
-document.addEventListener('DOMContentLoaded', fetchTasks);
-
-/*const taskForm = document.getElementById('task-form');
-const taskInput = document.getElementById('task-input');
-const taskList = document.getElementById('task-list');*/
 
 // --- NUEVAS constantes para los filtros ---
 const filterAllBtn = document.getElementById('filter-all');
